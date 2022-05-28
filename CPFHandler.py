@@ -20,6 +20,38 @@ class CPFThread(threading.Thread):
 
         with open('teste.txt', 'a') as f:
             f.writelines(sequence_list)
+
+class CPFValidator(threading.Thread):
+
+    cpf = ''
+
+    def validate_cpf(self, cpf):
+        cpf = str(cpf)
+        # Obtém apenas os números do CPF, ignorando pontuações
+        numbers = [int(digit) for digit in cpf if digit.isdigit()]
+
+        # Verifica se o CPF possui 11 números ou se todos são iguais:
+        if len(numbers) != 11 or len(set(numbers)) == 1:
+            return False
+
+        # Validação do primeiro dígito verificador:
+        sum_of_products = sum(a*b for a, b in zip(numbers[0:9], range(10, 1, -1)))
+        expected_digit = (sum_of_products * 10 % 11) % 10
+        if numbers[9] != expected_digit:
+            return False
+
+        # Validação do segundo dígito verificador:
+        sum_of_products = sum(a*b for a, b in zip(numbers[0:10], range(11, 1, -1)))
+        expected_digit = (sum_of_products * 10 % 11) % 10
+        if numbers[10] != expected_digit:
+            return False
+
+        return True
+
+    def run(self):
+        if(self.validate_cpf(cpf)):
+            print(f'CPF Valido')
+        
             
 
 
@@ -35,16 +67,13 @@ class CPFHandler:
         batch_size =  int(self.SIZE / os.cpu_count())
         print(f'Lotes: {batch_size}')
         print(f'Threads: {os.cpu_count()}')
-        for sequence in range(0, self.SIZE, batch_size):
-            cpf_thread = CPFThread()
-
-            if(sequence + batch_size <= self.SIZE):
-                print('Sequencia:' + str(sequence))
-                cpf_thread.batch_size = batch_size
-                cpf_thread.start()
-            else:
-                cpf_thread.batch_size = (self.SIZE - sequence) + 1
-                cpf_thread.start()
+        for sequence in range(10000000000, 10000100000):
+            print('Sequencia:' + str(sequence))
+            cpf_thread = CPFValidator()
+            cpf_thread.cpf = str(sequence)
+            cpf_thread.start()
+            '''if(self.fvalidate_cpf(sequence)):
+                print(f'Valido')'''
 
         
         tempo = time.time() - start
@@ -64,7 +93,8 @@ class CPFHandler:
         #gera sequencia de 11 digitos aleatória
         return ''.join(["{}".format(randint(0, 9)) for num in range(0, 11)])
 
-    def validate_cpf(self, cpf):
+    def fvalidate_cpf(self, cpf):
+        cpf = str(cpf)
         # Obtém apenas os números do CPF, ignorando pontuações
         numbers = [int(digit) for digit in cpf if digit.isdigit()]
 
