@@ -7,5 +7,6 @@ from text_processing.TextProcessing import TextProcessing
 
 text = TextHandle()
 
-text.handle_batch_processing()
+#text.handle_batch_processing()
 
+text.handle_single_processing()

@@ -50,3 +50,14 @@ class TextHandle():
                 thread.join()
             tempo = time.time() - start
             print(f'Tempo thread: {tempo}')
+
+    def handle_single_processing(self):
+            
+            start = time.time()
+            data_filter = self.readData()
+            text_process = TextProcessing()
+            text_process.data_filter = data_filter
+            text_process.start()
+
+            tempo = time.time() - start
+            print(f'Tempo sequencial: {tempo}')
