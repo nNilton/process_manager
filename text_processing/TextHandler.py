@@ -7,7 +7,7 @@ from text_processing.TextProcessing import TextProcessing
 class TextHandle():    
 
         #IMPORTAÇÃO DA BASE DE DADOS 
-    def readData(self, fileName = 'BaseDados', extension = "csv"):  
+    def readData(self, fileName = 'BaseDadosNew', extension = "csv"):  
         try:
             filepath = f'{fileName}.{extension}'
             data = pd.read_csv(filepath, sep=',')
