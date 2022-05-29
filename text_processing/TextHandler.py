@@ -29,19 +29,16 @@ class TextHandle():
             
             print(f'Lotes: {batch_size}')
             print(f'Threads Disponíveis: {os.cpu_count()}')
-            previous = -1
-            for sequence in range(1, SIZE + 1, batch_size):
+            previous = 0
+            for sequence in range(batch_size, SIZE, batch_size):
                 print('Sequencia:' + str(sequence))
                 text_process = TextProcessing()
-                
-                #print(data_filter[previous+1:sequence])
                 if(sequence + batch_size <= SIZE):
-                    #print('Sequencia:' + str(sequence))
-                    text_process.data_filter = data_filter.loc[previous+1:sequence]
+                    text_process.data_filter = data_filter.iloc[previous:sequence]
                     text_process.start()
                     process_list.append(text_process)
                 else:
-                    text_process.data_filter = data_filter[previous:(SIZE - sequence)] #!!
+                    text_process.data_filter = data_filter[previous:SIZE] 
                     text_process.start()
                     process_list.append(text_process)
 
